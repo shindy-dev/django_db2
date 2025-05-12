@@ -1,0 +1,4 @@
+django==4.2.21
+build==1.2.2.post1
+ibm_db==3.2.6
+ibm_db_django==1.5.3.0
