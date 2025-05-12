@@ -9,7 +9,7 @@ if [ ! -f "$MARKER_FILE" ]; then
     # 初回起動時処理
 
     # git pull
-    (cd /home/dev/github/shindjango && git pull -q)
+    (cd /home/dev/github/shindjango && git clone -q --depth=1 https://github.com/shindy-dev/shindjango.git .)
 
     # マーカーを作成
     touch "$MARKER_FILE"
@@ -19,6 +19,5 @@ fi
 # docker pull icr.io/db2_community/db2 && docker inspect icr.io/db2_community/db2 で確認
 /var/db2_setup/lib/setup_db2_instance.sh
 
-
 # 最後に bash を起動するなど
-exec /bin/bash
+exec /bin/bash -c python manager.py runserver 0:8000
