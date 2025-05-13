@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,9 +77,9 @@ WSGI_APPLICATION = 'shindjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'     : 'ibm_db_django',
-        'NAME'       : 'shindb',
-        'USER'       : 'db2inst1',
-        'PASSWORD'   : 'db2admin',
+        'NAME'       : config('DBNAME'),
+        'USER'       : config('DB2INSTANCE', default='db2inst1'),
+        'PASSWORD'   : config('DB2INST1_PASSWORD'),
         'HOST'       : 'localhost',
         'PORT'       : '50000',
         'PCONNECT'   :  True,      #Optional property, default is false
