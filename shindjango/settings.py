@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'shindjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'     : 'ibm_db_django',
-        'NAME'       : config('DBNAME'),
+        'NAME'       : 'SHINDB',
         'USER'       : config('DB2INSTANCE', default='db2inst1'),
         'PASSWORD'   : config('DB2INST1_PASSWORD'),
         'HOST'       : 'localhost',
