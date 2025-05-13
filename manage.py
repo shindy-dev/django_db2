@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+
 import os
 import sys
 
+# manage.py は、Django プロジェクトの管理コマンドを実行するためのユーティリティです。
+# manage.py makemigrations は、モデルの変更を検出してマイグレーションファイルを作成します。マイグレーションファイルは、データベースのスキーマを変更するための手順を記述したものです。
+# manage.py migrate は、マイグレーションファイルを適用してデータベースのスキーマを更新します。
+# manage.py runserver は、開発用のウェブサーバーを起動します。これにより、ローカルでアプリケーションをテストできます。
+# manage.py createsuperuser は、Django の管理画面にアクセスするためのスーパーユーザーを作成します。
+# manage.py collectstatic は、静的ファイルを収集して、指定されたディレクトリに配置します。これにより、静的ファイルを本番環境で提供できるようになります。
 
 def main():
     """Run administrative tasks."""

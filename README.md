@@ -232,6 +232,10 @@ Quit the server with CONTROL-C.
 ホストOSから http://localhost:8000/admin/ にアクセスしてページが表示されることを確認
 ![admin](docs/adminpage.png)
 
+ホームページ作成
+```bash
+python manage.py startapp home
+```
 
 
 ## 参考文献一覧
