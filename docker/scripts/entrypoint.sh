@@ -8,6 +8,8 @@ MARKER_FILE="/var/.entrypoint_initialized"
 if [ ! -f "$MARKER_FILE" ]; then
     # 初回起動時処理
 
+    # git pull モード指定
+    git config --global pull.rebase true
     # git pull
     (cd /home/dev/github/shindjango && git clone -q https://github.com/shindy-dev/shindjango.git .)
 
@@ -19,5 +21,4 @@ fi
 # docker pull icr.io/db2_community/db2 && docker inspect icr.io/db2_community/db2 で確認
 /var/db2_setup/lib/setup_db2_instance.sh
 
-# 最後に bash を起動するなど
-exec /bin/bash
+# db2インスタンスが起動した後に実行するスクリプトは/var/custom/内にファイルを格納する
