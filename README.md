@@ -3,7 +3,7 @@
 ## 概要
 Django勉強用リポジトリ  
 ここには環境構築から実際のサイト作成手順を具体的に記載する  
-Djangoの概要については[こちら](docs/aboutDjango.md)
+Djangoの概要については[こちら](docs/aboutDjango.md)（AIまとめ）
 
 ## 環境
 - ### [Docker Desktop](https://www.docker.com/ja-jp/products/docker-desktop/) on macOS
