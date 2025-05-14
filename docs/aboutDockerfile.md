@@ -63,16 +63,6 @@ RUN wget -q https://.../Miniforge3-Linux-x86_64.sh && \
 
 ---
 
-### リポジトリの取得
-```Dockerfile
-WORKDIR /home/dev/github
-RUN git clone --depth=1 https://github.com/shindy-dev/shindjango.git
-```
-- 作業ディレクトリを設定してコードをクローン
-- `--depth=1`: 最新コミットだけ取得し高速化
-
----
-
 ### プロジェクトに移動
 ```Dockerfile
 WORKDIR /home/dev/github/shindjango
@@ -86,14 +76,11 @@ RUN /bin/bash -c "source $CONDA_DIR/etc/profile.d/conda.sh && \
                   conda create -n django python=3.12.10 -y --quiet && \
                   conda activate django && \
                   pip install  --quiet --no-cache-dir -r requirements.txt && \
-                  python -m build django-polls && \
-                  pip install --quiet --no-cache-dir django-polls/dist/django_polls-0.1.tar.gz && \
                   conda clean --all --yes"
 ```
 - Conda シェルスクリプトを source で読み込み
 - `django` という名前の Conda 環境を作成（Python 3.12.10 指定）
 - 依存関係のインストール
-- Django アプリ（django-polls）のビルドとインストール
 - キャッシュ削除
 
 ---
