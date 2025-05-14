@@ -22,4 +22,6 @@ fi
 /var/db2_setup/lib/setup_db2_instance.sh
 
 # 最後に bash を起動するなど
-exec /bin/bash
+conda activate django
+cd /home/dev/github/shindjango
+python manage.py runserver 0.0.0.0:8000
