@@ -8,6 +8,8 @@ MARKER_FILE="/var/.entrypoint_initialized"
 if [ ! -f "$MARKER_FILE" ]; then
     # 初回起動時処理
 
+    # git pull モード指定
+    git config --global pull.rebase true
     # git pull
     (cd /home/dev/github/shindjango && git clone -q https://github.com/shindy-dev/shindjango.git .)
 
