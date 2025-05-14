@@ -107,11 +107,9 @@ ETCD_PASSWORD=
 macOS  
 ```bash
 docker stop shindjango || true && docker rm shindjango || true && \
-docker volume rm v_shindjango || true && \
-docker volume create v_shindjango && \
 docker run -itd -h shindjango --name shindjango --restart=always \
 --privileged -p 8000:8000 -p 50000:50000 --env-file .env \
--v v_shindjango:/database --platform=linux/amd64 shindy0810/shindjango:latest && \
+--platform=linux/amd64 shindy0810/shindjango:latest && \
 docker exec -it shindjango /bin/bash
 ```
 
@@ -119,12 +117,10 @@ Windows
 ```powershell
 docker stop shindjango
 docker rm shindjango
-docker volume rm v_shindjango
-docker volume create v_shindjango
 
 docker run -itd -h shindjango --name shindjango --restart=always `
 --privileged -p 8000:8000 -p 50000:50000 --env-file ".env" `
--v v_shindjango:/database --platform=linux/amd64 shindy0810/shindjango:latest
+--platform=linux/amd64 shindy0810/shindjango:latest
 
 docker exec -it shindjango /bin/bash
 ```
@@ -141,33 +137,12 @@ docker stop shindjango || true && docker rm shindjango || true
 
 ---
 
-#### 2. DB格納用ボリューム削除（失敗しても続行）
-
-```bash
-docker volume rm v_shindjango || true
-```
-
-- `v_shindjango` ボリュームを削除
-- 存在しなくても `|| true` により続行
-
----
-
-#### 3. DB格納用ボリューム作成
-
-```bash
-docker volume create v_shindjango
-```
-
-- 新しいボリューム `v_shindjango` を作成
-
----
-
-#### 4. コンテナ起動
+#### 2. コンテナ起動
 
 ```bash
 docker run -itd -h shindjango --name shindjango --restart=always \
 --privileged -p 8000:8000 -p 50000:50000 --env-file ~/.env \
--v v_shindjango:/database --platform=linux/amd64 shindy0810/shindjango:latest
+--platform=linux/amd64 shindy0810/shindjango:latest
 ```
 
 - `-itd`: インタラクティブ・バックグラウンドモード
@@ -177,13 +152,12 @@ docker run -itd -h shindjango --name shindjango --restart=always \
 - `--privileged`: 特権モードで起動
 - `-p`: ポートマッピング(8000はdjangoサーバのポート、50000はdb2サーバのポート)
 - `--env-file`: 環境変数を `.env` ファイルから
-- `-v`: ボリュームを `/database` にマウント
 - `--platform`: 明示的にプラットフォームを指定
 - `shindy0810/shindjango:latest`: 使用するイメージ
 
 ---
 
-#### 5. コンテナの中に入る
+#### 3. コンテナの中に入る
 
 ```bash
 docker exec -it shindjango /bin/bash
