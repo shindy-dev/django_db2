@@ -21,6 +21,6 @@ from django.urls import include, path
 # urls.py は、Django プロジェクトの URL ルーティングを定義するファイルです。
 
 urlpatterns = [
-    path("", include("home.urls")),
+    path("home/", include("home.urls")),
     path('admin/', admin.site.urls),
 ]
