@@ -27,10 +27,6 @@ RUN /bin/bash -c "source $CONDA_DIR/etc/profile.d/conda.sh && \
 # Conda環境を有効にするためのコマンドを追記
 RUN sed -i '$a conda activate django' /root/.bashrc
 
-# コンテナ再起動時に既存のdb2インスタンス作成が権限エラーで失敗するのを防ぐため、権限付与コマンドを追記
-# https://community.ibm.com/community/user/discussion/121-container-community-edition-docker-start-fails-dbi20187e
-RUN sed -i '1a chown root:db2iadm1 /database/config/${DB2INSTANCE?}/sqllib/adm/fencedid' /var/db2_setup/lib/setup_db2_instance.sh
-
 # キャッシュ等削除
 RUN rm -rf /tmp/* /var/tmp/* /root/.cache/*
 
@@ -39,6 +35,20 @@ EXPOSE 8000 50000
 
 WORKDIR /home/dev/github/shindjango
 
-COPY docker/scripts/entrypoint.sh /root/entrypoint.sh
-RUN chmod +x /root/entrypoint.sh
-ENTRYPOINT ["/root/entrypoint.sh"]
+# db2インスタンス実行後に処理したいスクリプトをコピー
+COPY docker/scripts/postprocessing.sh /var/custom/postprocessing.sh
+RUN chmod +x /var/custom/postprocessing.sh
+
+# Webサーバ起動用スクリプトのコピー
+COPY docker/scripts/runwebserver.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/runwebserver.sh
+
+# Db2サーバ起動用スクリプトのコピー(以下の問題から、コンテナ内部のスクリプトを修正して上書き)
+# https://community.ibm.com/community/user/discussion/121-container-community-edition-docker-start-fails-dbi20187e
+COPY docker/scripts/setup_db2_instance.sh /var/db2_setup/lib/setup_db2_instance.sh
+RUN chmod +x /var/db2_setup/lib/setup_db2_instance.sh
+
+# エントリーポイントの設定
+COPY docker/scripts/entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

@@ -21,7 +21,4 @@ fi
 # docker pull icr.io/db2_community/db2 && docker inspect icr.io/db2_community/db2 で確認
 /var/db2_setup/lib/setup_db2_instance.sh
 
-# 最後に bash を起動するなど
-conda activate django
-cd /home/dev/github/shindjango
-python manage.py runserver 0.0.0.0:8000
+# db2インスタンスが起動した後に実行するスクリプトは/var/custom/内にファイルを格納する
