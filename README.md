@@ -3,7 +3,7 @@
 ## 概要
 Django勉強用リポジトリ  
 ここには環境構築から実際のサイト作成手順を具体的に記載する  
-Djangoの概要については[こちら](docs/aboutDjango.md)（AIまとめ）
+Djangoの概要については[こちら](docs/about_Django.md)（AIまとめ）
 
 ## 環境
 - ### [Docker Desktop](https://www.docker.com/ja-jp/products/docker-desktop/) on macOS
@@ -11,7 +11,7 @@ Djangoの概要については[こちら](docs/aboutDjango.md)（AIまとめ）
 
     今回使用するイメージ：[shindy0810/shindjango](https://hub.docker.com/r/shindy0810/shindjango)  
     ┗[Db2 Community Edition for Docker](https://www.ibm.com/docs/ja/db2/11.5.x?topic=deployments-db2-community-edition-docker)のDockerイメージ(Red Hat Enterprise Linux 9)をベースにDjango用のライブラリをインストールしたイメージ  
-    ┗[どのようにイメージを作成したか](docs/buildDockerImage.md)  
+    ┗[どのようにイメージを作成したか](docs/build_DockerImage.md)  
 
     tips. Red HatはLinuxベースのOSであり、Linuxコンテナは通常Linuxカーネルに依存するため、Linux上での実行が前提となる。しかし、Docker DesktopではmacOSではLinux仮想マシン（VM）、WindowsではWSL2などの仮想基盤を用いることで、非Linux OS上でもLinuxコンテナの実行を可能としている
 

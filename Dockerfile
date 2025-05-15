@@ -1,26 +1,23 @@
-FROM icr.io/db2_community/db2:12.1.1.0
+FROM python:3.11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CONDA_DIR=/opt/conda
 ENV PATH="$CONDA_DIR/bin:$PATH"
 
 # 必要パッケージのインストール
-RUN dnf install -y git wget bzip2 && \
-    dnf clean all
+RUN apt update && apt upgrade -y && apt install -y && \
+    git wget bzip2 && \
+    apt autoremove -y && apt autoclean -y
 
 # Miniforge のインストール（バージョン固定）
 RUN wget --no-check-certificate https://github.com/conda-forge/miniforge/releases/download/23.11.0-0/Miniforge3-Linux-x86_64.sh && \
-    bash Miniforge3-Linux-x86_64.sh -b -p $CONDA_DIR && \
-    rm Miniforge3-Linux-x86_64.sh && \
-    $CONDA_DIR/bin/conda init && \
-    $CONDA_DIR/bin/conda clean --all --yes
+    bash Miniforge3-Linux-x86_64.sh -b -p $CONDA_DIR && rm Miniforge3-Linux-x86_64.sh && \
+    $CONDA_DIR/bin/conda init && $CONDA_DIR/bin/conda clean --all --yes
 
 # Conda環境作成と依存インストール（まとめて実行）
 COPY docker/requirements.txt /root/requirements.txt
 RUN chmod +x /root/requirements.txt
-RUN /bin/bash -c "source $CONDA_DIR/etc/profile.d/conda.sh && \
-    conda create -n django python=3.12.10 -y && \
-    conda activate django && \
+RUN /bin/bash -c "source $CONDA_DIR/etc/profile.d/conda.sh && conda create -n django python=3.12.10 -y && conda activate django && \
     pip install --no-cache-dir -r /root/requirements.txt && \
     conda clean --all --yes"
 
@@ -30,25 +27,17 @@ RUN sed -i '$a conda activate django' /root/.bashrc
 # キャッシュ等削除
 RUN rm -rf /tmp/* /var/tmp/* /root/.cache/*
 
-# ポートを公開（Web/Django、DB2）
-EXPOSE 8000 50000
+# ポート公開（Web/Django）
+EXPOSE 8000
 
 WORKDIR /home/dev/github/shindjango
 
-# db2インスタンス実行後に処理したいスクリプトをコピー
+# サーバ初期化後に処理したいスクリプトをコピー
 COPY docker/scripts/postprocessing.sh /var/custom/postprocessing.sh
 RUN chmod +x /var/custom/postprocessing.sh
-
-# Webサーバ起動用スクリプトのコピー
-COPY docker/scripts/runwebserver.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/runwebserver.sh
-
-# Db2サーバ起動用スクリプトのコピー(以下の問題から、コンテナ内部のスクリプトを修正して上書き)
-# https://community.ibm.com/community/user/discussion/121-container-community-edition-docker-start-fails-dbi20187e
-COPY docker/scripts/setup_db2_instance.sh /var/db2_setup/lib/setup_db2_instance.sh
-RUN chmod +x /var/db2_setup/lib/setup_db2_instance.sh
 
 # エントリーポイントの設定
 COPY docker/scripts/entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["0.0.0.0:8000"]

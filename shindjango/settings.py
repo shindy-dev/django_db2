@@ -79,6 +79,10 @@ WSGI_APPLICATION = 'shindjango.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'db2':{
         'ENGINE'     : 'ibm_db_django',
         'NAME'       : 'SHINDB',
         'USER'       : config('DB2INSTANCE', default='db2inst1'),
