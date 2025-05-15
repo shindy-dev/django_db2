@@ -1,12 +1,12 @@
-FROM python:3.11-slim
+FROM python:3.12.10-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CONDA_DIR=/opt/conda
 ENV PATH="$CONDA_DIR/bin:$PATH"
 
 # 必要パッケージのインストール
-RUN apt update && apt upgrade -y && apt install -y && \
-    git wget bzip2 && \
+RUN apt update && apt upgrade -y && \
+    apt install -y git wget bzip2 && \
     apt autoremove -y && apt autoclean -y
 
 # Miniforge のインストール（バージョン固定）
