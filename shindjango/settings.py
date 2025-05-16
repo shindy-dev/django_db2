@@ -91,7 +91,7 @@ DATABASES = {
         'PORT'       : config('PORT', default='50000'),
         'PCONNECT'   : config('PCONNECT', default=False),
         'CURRENTSCHEMA': config('CURRENTSCHEMA', default='SHINDYAPP'),
-    }
+    } # python manage.py migrate --database=db2
 }
 
 
