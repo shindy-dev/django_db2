@@ -80,10 +80,16 @@ PCONNECT=True
 
 ### 3. Boot Container
 
+#### Create Custome Network
+```bash
+# コンテナ間通信用ネットワーク作成
+docker network create mynet
+```
+
 #### Run Container
 ```bash
 # デーモンプロセスとしてコンテナ起動
-docker run -itd -h shindjango --name shindjango --restart=always --privileged -p 8000:8000 --env-file ~/.env --platform=linux/amd64 shindy0810/shindjango:latest
+docker run -itd -h shindjango --name shindjango --restart=always --privileged -p 8000:8000 --env-file ~/.env --network mynet --platform=linux/amd64 shindy0810/shindjango:latest
 ```
 - `-itd`: インタラクティブ・バックグラウンドモード
 - `-h shindjango`: ホスト名の設定
@@ -92,6 +98,7 @@ docker run -itd -h shindjango --name shindjango --restart=always --privileged -p
 - `--privileged`: 特権モードで起動
 - `-p`: ポートマッピング(8000はdjangoサーバのポート)
 - `--env-file`: 環境変数を `.env` ファイルから
+- `--network`: ネットワークを指定
 - `--platform`: 明示的にプラットフォームを指定
 - `shindy0810/shindjango:latest`: 使用するイメージ
 
@@ -108,7 +115,7 @@ docker exec -it shindjango /bin/bash
     ```bash
     docker stop shindjango || true && docker rm shindjango || true && \
     docker run -itd -h shindjango --name shindjango --restart=always \
-    --privileged -p 8000:8000 --env-file .env \
+    --privileged -p 8000:8000 --env-file .env --network mynet \
     --platform=linux/amd64 shindy0810/shindjango:latest && \
     docker exec -it shindjango /bin/bash
     ```
@@ -119,7 +126,7 @@ docker exec -it shindjango /bin/bash
     docker rm shindjango
 
     docker run -itd -h shindjango --name shindjango --restart=always `
-    --privileged -p 8000:8000 --env-file ".env" `
+    --privileged -p 8000:8000 --env-file ".env" --network mynet `
     --platform=linux/amd64 shindy0810/shindjango:latest
 
     docker exec -it shindjango /bin/bash
