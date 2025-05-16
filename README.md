@@ -61,16 +61,21 @@ docker pull shindy0810/shindjango:latest --platform=linux/amd64
 環境依存の設定を.envファイル（任意のパスに作成）に記載する  
 ※Databaseを使用するために必要な設定
 ```
-USER=db2inst1
-PASSWORD=db2inst1
+USER=dbuser
+PASSWORD=dbuser
 DBNAME=TESTDB
+HOST=mydb2
+PORT=50000
+PCONNECT=True
 ```
 
 項目説明  
-- DB2INSTANCE は Db2 インスタンス名を指定します。
-- DB2INST1_PASSWORD は、 Db2 インスタンスのパスワードを指定します。
-- DBNAME は、指定された名前で初期データベースを作成します (データベースが必要ない場合は空のままにします)
-
+- USER は DBへ接続するためのユーザー名を指定します。
+- PASSWORD は、 DBへ接続するためのパスワードを指定します。
+- DBNAME は、指定された名前のDBへ接続します。
+- HOST は、指定されたIPでDBへ接続します。
+- PORT は、指定されたポートでDBへ接続します。
+- PCONNECT は永続的接続（persistent connection） を有効にするかどうかを選択します。
 ---
 
 ### 3. Boot Container
