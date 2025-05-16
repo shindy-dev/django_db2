@@ -27,7 +27,7 @@ if [ -d /var/custom ]; then
   done
 fi
 
-source /root/.bashrc
+source /opt/conda/etc/profile.d/conda.sh
 conda activate django
 # Djangoのマイグレーション
 cd /home/dev/github/shindjango
