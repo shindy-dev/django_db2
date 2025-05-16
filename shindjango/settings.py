@@ -79,15 +79,19 @@ WSGI_APPLICATION = 'shindjango.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'db2':{
         'ENGINE'     : 'ibm_db_django',
-        'NAME'       : 'SHINDB',
-        'USER'       : config('DB2INSTANCE', default='db2inst1'),
-        'PASSWORD'   : config('DB2INST1_PASSWORD'),
-        'HOST'       : 'localhost',
-        'PORT'       : '50000',
-        'PCONNECT'   :  True,      #Optional property, default is false
-        'CURRENTSCHEMA': 'SHINDYAPP', #Optional property, default is USER
-    }
+        'NAME'       : config('DBNAME' , default='SHINDB'),
+        'USER'       : config('USER', default='db2inst1'),
+        'PASSWORD'   : config('PASSWORD'),
+        'HOST'       : config('HOST', default='localhost'),
+        'PORT'       : config('PORT', default='50000'),
+        'PCONNECT'   : config('PCONNECT', default=False),
+        'CURRENTSCHEMA': config('CURRENTSCHEMA', default='SHINDYAPP'),
+    } # python manage.py migrate --database=db2
 }
 
 

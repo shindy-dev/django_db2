@@ -17,8 +17,22 @@ if [ ! -f "$MARKER_FILE" ]; then
     touch "$MARKER_FILE"
 fi
 
-# icr.io/db2_community/db2のEntrypoint
-# docker pull icr.io/db2_community/db2 && docker inspect icr.io/db2_community/db2 で確認
-/var/db2_setup/lib/setup_db2_instance.sh
+# /var/custom 内のすべての .sh ファイルを実行
+if [ -d /var/custom ]; then
+  for script in /var/custom/*.sh; do
+    if [ -f "$script" ]; then
+      chmod +x "$script"
+      "$script"
+    fi
+  done
+fi
 
-# db2インスタンスが起動した後に実行するスクリプトは/var/custom/内にファイルを格納する
+source /opt/conda/etc/profile.d/conda.sh
+conda activate django
+# Djangoのマイグレーション
+cd /home/dev/github/shindjango
+# マイグレーションの作成
+python manage.py makemigrations
+# マイグレーションの適用
+python manage.py migrate
+exec python manage.py runserver "$@"
