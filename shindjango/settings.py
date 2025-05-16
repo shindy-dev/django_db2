@@ -87,10 +87,10 @@ DATABASES = {
         'NAME'       : config('DBNAME' , default='SHINDB'),
         'USER'       : config('USER', default='db2inst1'),
         'PASSWORD'   : config('PASSWORD'),
-        'HOST'       : 'mydb2',  # Container name(default: localhost)
-        'PORT'       : '50000',
-        'PCONNECT'   :  True,      #Optional property, default is false
-        'CURRENTSCHEMA': 'SHINDYAPP', #Optional property, default is USER
+        'HOST'       : config('HOST', default='localhost'),
+        'PORT'       : config('PORT', default='50000'),
+        'PCONNECT'   : config('PCONNECT', default=False),
+        'CURRENTSCHEMA': config('CURRENTSCHEMA', default='SHINDYAPP'),
     }
 }
 
