@@ -1,126 +1,123 @@
-# Dockerfile 解説（Python + Miniforge + Django 環境）【APT版】
+# Dockerfile 解説ドキュメント
 
-この Dockerfile は、`python:3.11-slim` イメージをベースに、Miniforge（Conda）を利用して Django 環境を構築するためのものです。パッケージ管理には `apt` を使用しています。
+このドキュメントでは、`ubuntu/nginx:1.24-24.04_edge` イメージをベースにしたDockerfileの構成について詳しく解説します。
 
 ---
 
-## 🧱 ベースイメージと環境変数
+## ベースイメージの指定
 
-```dockerfile
-FROM python:3.11-slim
+```
+FROM ubuntu/nginx:1.24-24.04_edge
+```
 
+Ubuntu 24.04ベースの Nginx 組み込みイメージを使用。Webサーバとしての機能を提供しつつ、Python環境も追加構築する目的。
+
+---
+
+## 環境変数の設定
+
+```
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CONDA_DIR=/opt/conda
 ENV PATH="$CONDA_DIR/bin:$PATH"
 ```
 
-- `python:3.11-slim` をベースとした軽量なPython環境。
-- Conda のインストール先と PATH を設定。
-- `DEBIAN_FRONTEND=noninteractive` により、非対話形式で apt を実行。
+- `DEBIAN_FRONTEND=noninteractive`：apt実行時に対話的プロンプトを表示しない。
+- `CONDA_DIR`：Miniforgeのインストール先。
+- `PATH`：condaコマンドをパスに追加。
 
 ---
 
-## 📦 必要パッケージのインストール（APT使用）
+## パッケージのインストール
 
-```dockerfile
-RUN apt update && apt upgrade -y && apt install -y && \
-    git wget bzip2 && \
-    apt autoremove -y && apt autoclean -y
+```
+RUN apt update && apt upgrade -y &&     apt install -y git wget bzip2 &&     apt autoremove -y && apt autoclean -y
 ```
 
-- `apt update && upgrade` により最新状態へ更新。
-- `git`, `wget`, `bzip2` をインストール。
-- `autoremove` で不要パッケージを削除し、`autoclean` で古いキャッシュを削除。
+- 必要最低限の開発用ツール（git, wget, bzip2）をインストール。
+- システムを最新状態に更新後、不要なキャッシュを削除。
 
 ---
 
-## 🐍 Miniforge（Conda）のインストール
+## Miniforgeのインストール
 
-```dockerfile
-RUN wget --no-check-certificate https://github.com/conda-forge/miniforge/releases/download/23.11.0-0/Miniforge3-Linux-x86_64.sh && \
-    bash Miniforge3-Linux-x86_64.sh -b -p $CONDA_DIR && rm Miniforge3-Linux-x86_64.sh && \
-    $CONDA_DIR/bin/conda init && $CONDA_DIR/bin/conda clean --all --yes
+```
+RUN wget ... && bash Miniforge3... && conda init ...
 ```
 
-- Miniforge（Condaの軽量版）をダウンロード・インストール。
-- Condaの初期化とキャッシュクリアを実行。
+- Miniforge（軽量なCondaディストリビューション）を指定バージョンでインストール。
+- 初期化とキャッシュ削除を含め、効率的な環境構築。
 
 ---
 
-## 📚 Python環境と依存パッケージのセットアップ
+## Python/依存パッケージのインストール
 
-```dockerfile
+```
 COPY docker/requirements.txt /root/requirements.txt
 RUN chmod +x /root/requirements.txt
+RUN /bin/bash -c "source ... && conda create ... && pip install ..."
 ```
 
-- 必要なPythonパッケージを指定した `requirements.txt` をコンテナにコピーし、実行可能に。
-
-```dockerfile
-RUN /bin/bash -c "source $CONDA_DIR/etc/profile.d/conda.sh && conda create -n django python=3.12.10 -y && conda activate django && \
-    pip install --no-cache-dir -r /root/requirements.txt && \
-    conda clean --all --yes"
-```
-
-- Conda環境 `django` を作成し、Python 3.12.10 をインストール。
-- pip で依存パッケージをインストールし、キャッシュ削除。
+- Django用のPython 3.12.10仮想環境を作成し、`requirements.txt`に基づく依存関係をインストール。
 
 ---
 
-## 🔁 Conda環境を自動有効化
+## 起動時にConda環境を有効化
 
-```dockerfile
+```
 RUN sed -i '$a conda activate django' /root/.bashrc
 ```
 
-- `.bashrc` に Conda環境のアクティベートコマンドを追記。
+- bashシェル起動時に自動で `django` 環境が有効化されるよう設定。
 
 ---
 
-## 🧹 キャッシュ削除と軽量化
+## 不要ファイルの削除
 
-```dockerfile
+```
 RUN rm -rf /tmp/* /var/tmp/* /root/.cache/*
 ```
 
-- コンテナ内の不要な一時ファイルやキャッシュを削除。
+- 追加で不要なキャッシュ等を削除し、イメージサイズを削減。
 
 ---
 
-## 🌐 ポートと作業ディレクトリ
+## ポートの公開と作業ディレクトリの指定
 
-```dockerfile
+```
 EXPOSE 8000
 WORKDIR /home/dev/github/shindjango
 ```
 
-- Django の開発サーバーで使用する 8000 番ポートを公開。
-- 作業ディレクトリを指定。
+- Django開発サーバ用のポート8000を開放。
+- 作業ディレクトリを指定し、CMD等の実行場所を定義。
 
 ---
 
-## 📜 スクリプトの配置と設定
+## スクリプトの配置と実行権限付与
 
-```dockerfile
+```
 COPY docker/scripts/postprocessing.sh /var/custom/postprocessing.sh
-RUN chmod +x /var/custom/postprocessing.sh
-
 COPY docker/scripts/entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod +x ...
 ```
 
-- 後処理スクリプト・エントリースクリプトを配置し、実行権限を付与。
+- コンテナ起動後の初期処理スクリプトを設置し、実行権限を付与。
 
 ---
 
-## 🚀 起動設定
+## エントリーポイントとデフォルトコマンド
 
-```dockerfile
+```
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["0.0.0.0:8000"]
 ```
 
-- コンテナ起動時に `entrypoint.sh` を実行。
-- `CMD` の引数は Django のサーバーアドレス指定などに使用可能。
+- カスタムエントリーポイントスクリプトを指定。
+- Django開発サーバを `0.0.0.0:8000` で起動。
 
 ---
+
+## 補足
+
+このDockerfileは、PythonとNginxを組み合わせたWebアプリ環境（特にDjango）構築のためのテンプレートです。Miniforgeを用いることで軽量かつ柔軟なPython環境を提供し、依存関係の管理もCondaで一元化されています。
