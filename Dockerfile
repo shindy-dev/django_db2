@@ -1,4 +1,4 @@
-FROM python:3.12.10-slim
+FROM ubuntu/nginx:1.24-24.04_edge
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CONDA_DIR=/opt/conda
