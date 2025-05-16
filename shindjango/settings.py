@@ -84,9 +84,9 @@ DATABASES = {
     },
     'db2':{
         'ENGINE'     : 'ibm_db_django',
-        'NAME'       : 'SHINDB',
-        'USER'       : config('DB2INSTANCE', default='db2inst1'),
-        'PASSWORD'   : config('DB2INST1_PASSWORD'),
+        'NAME'       : config('DBNAME' , default='SHINDB'),
+        'USER'       : config('USER', default='db2inst1'),
+        'PASSWORD'   : config('PASSWORD'),
         'HOST'       : 'localhost',
         'PORT'       : '50000',
         'PCONNECT'   :  True,      #Optional property, default is false
