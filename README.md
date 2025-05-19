@@ -1,4 +1,4 @@
-# [shindjango](https://github.com/shindy-dev/shindjango)
+# [shindjango](https://github.com/shindy-dev/django_db2)
 
 ## Abstract
 Django勉強用リポジトリ  
