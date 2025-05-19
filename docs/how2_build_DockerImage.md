@@ -7,7 +7,7 @@
 Dockerfileのあるディレクトリで以下実行
 ```bash
 # docker build . -t イメージ名:タグ名  --platform=linux/amd64
-docker build . -t shindjango:latest  --platform=linux/amd64
+docker build . -t django_db2:latest  --platform=linux/amd64
 ```
 
 ## Push Image to *[Github Packages](https://github.co.jp/features/packages)*
@@ -45,9 +45,9 @@ docker push ghcr.io/<your-username>/<image-name>:<tag>
 ```bash
 # docker build . -t アカウント名/リモートリポジトリ名:タグ名  --platform=linux/amd64
 # docker push ghcr.io/<your-username>/<image-name>:<tag>
-docker build . -t ghcr.io/shindy-dev/shindjango:latest  --platform=linux/amd64
+docker build . -t ghcr.io/shindy-dev/django_db2:latest  --platform=linux/amd64
 
 # pushを実行
 # docker push ghcr.io/<your-username>/<image-name>:<tag>
-docker push ghcr.io/shindy-dev/shindjango:latest
+docker push ghcr.io/shindy-dev/django_db2:latest
 ```

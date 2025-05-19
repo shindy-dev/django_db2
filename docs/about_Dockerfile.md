@@ -86,7 +86,7 @@ RUN rm -rf /tmp/* /var/tmp/* /root/.cache/*
 
 ```
 EXPOSE 8000
-WORKDIR /home/dev/github/shindjango
+WORKDIR /home/dev/github/django_db2
 ```
 
 - Django開発サーバ用のポート8000を開放。

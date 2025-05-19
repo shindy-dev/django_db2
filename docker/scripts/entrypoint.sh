@@ -11,7 +11,7 @@ if [ ! -f "$MARKER_FILE" ]; then
     # git pull モード指定
     git config --global pull.rebase true
     # git pull
-    (cd /home/dev/github/shindjango && git clone -q https://github.com/shindy-dev/shindjango.git .)
+    (cd /home/dev/github/django_db2 && git clone -q https://github.com/shindy-dev/django_db2.git .)
 
     # マーカーを作成
     touch "$MARKER_FILE"
@@ -30,7 +30,7 @@ fi
 source /opt/conda/etc/profile.d/conda.sh
 conda activate django
 # Djangoのマイグレーション
-cd /home/dev/github/shindjango
+cd /home/dev/github/django_db2
 # マイグレーションの作成
 python manage.py makemigrations
 # マイグレーションの適用

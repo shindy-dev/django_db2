@@ -11,9 +11,10 @@ import sys
 # manage.py createsuperuser は、Django の管理画面にアクセスするためのスーパーユーザーを作成します。
 # manage.py collectstatic は、静的ファイルを収集して、指定されたディレクトリに配置します。これにより、静的ファイルを本番環境で提供できるようになります。
 
+
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shindjango.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_db2.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -25,5 +26,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

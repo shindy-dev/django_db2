@@ -9,7 +9,7 @@ Djangoの概要については[こちら](docs/about_Django.md)（AIまとめ）
 - ### [Docker Desktop](https://www.docker.com/ja-jp/products/docker-desktop/) on macOS
     version 28.0.4, build b8034c0
 
-    今回使用するイメージ：[shindy0810/shindjango](https://hub.docker.com/r/shindy0810/shindjango)  
+    今回使用するイメージ：[shindy0810/django_db2](https://hub.docker.com/r/shindy0810/django_db2)  
 
     tips. [How to build Docker Image](docs/how2_build_DockerImage.md)
 
@@ -52,7 +52,7 @@ Djangoの概要については[こちら](docs/about_Django.md)（AIまとめ）
 ## How to build Environment
 ### 1. Pull Image
 ```bash
-docker pull shindy0810/shindjango:latest --platform=linux/amd64
+docker pull shindy0810/django_db2:latest --platform=linux/amd64
 ```
 
 ---
@@ -89,60 +89,60 @@ docker network create mynet
 #### Run Container
 ```bash
 # デーモンプロセスとしてコンテナ起動
-docker run -itd -h shindjango --name shindjango --restart=always --privileged -p 8000:8000 --env-file ~/.env --network mynet --platform=linux/amd64 shindy0810/shindjango:latest
+docker run -itd -h django_db2 --name django_db2 --restart=always --privileged -p 8000:8000 --env-file ~/.env --network mynet --platform=linux/amd64 shindy0810/django_db2:latest
 ```
 - `-itd`: インタラクティブ・バックグラウンドモード
-- `-h shindjango`: ホスト名の設定
-- `--name`: コンテナ名を `shindjango` に指定
+- `-h django_db2`: ホスト名の設定
+- `--name`: コンテナ名を `django_db2` に指定
 - `--restart=always`: 自動再起動設定
 - `--privileged`: 特権モードで起動
 - `-p`: ポートマッピング(8000はdjangoサーバのポート)
 - `--env-file`: 環境変数を `.env` ファイルから
 - `--network`: ネットワークを指定
 - `--platform`: 明示的にプラットフォームを指定
-- `shindy0810/shindjango:latest`: 使用するイメージ
+- `shindy0810/django_db2:latest`: 使用するイメージ
 
 ---
 
 #### Execute Container
 ```bash
 # /bin/bashで実行
-docker exec -it shindjango /bin/bash
+docker exec -it django_db2 /bin/bash
 ```
 
 #### Remove & Run & Execute Container
 - macOS  
     ```bash
-    docker stop shindjango || true && docker rm shindjango || true && \
-    docker run -itd -h shindjango --name shindjango --restart=always \
+    docker stop django_db2 || true && docker rm django_db2 || true && \
+    docker run -itd -h django_db2 --name django_db2 --restart=always \
     --privileged -p 8000:8000 --env-file .env --network mynet \
-    --platform=linux/amd64 shindy0810/shindjango:latest && \
-    docker exec -it shindjango /bin/bash
+    --platform=linux/amd64 shindy0810/django_db2:latest && \
+    docker exec -it django_db2 /bin/bash
     ```
 
 - Windows
     ```powershell
-    docker stop shindjango
-    docker rm shindjango
+    docker stop django_db2
+    docker rm django_db2
 
-    docker run -itd -h shindjango --name shindjango --restart=always `
+    docker run -itd -h django_db2 --name django_db2 --restart=always `
     --privileged -p 8000:8000 --env-file ".env" --network mynet `
-    --platform=linux/amd64 shindy0810/shindjango:latest
+    --platform=linux/amd64 shindy0810/django_db2:latest
 
-    docker exec -it shindjango /bin/bash
+    docker exec -it django_db2 /bin/bash
     ```
 ---
 
 
-## shindjangoプロジェクト作成プロセス
-`shindjango`プロジェクト作成
+## django_db2プロジェクト作成プロセス
+`django_db2`プロジェクト作成
 ```bash
-django-admin startproject shindjango .
+django-admin startproject django_db2 .
 ```
 
 Djangoサーバの初期設定〜起動まで
 ```bash
-# shindbに対してshindjangoアプリで定義したmodelを反映（modelを更新する度に要実行）
+# shindbに対してdjango_db2アプリで定義したmodelを反映（modelを更新する度に要実行）
 python manager.py migrate
 # 管理者ユーザーの作成
 python manager.py createsuperuser
@@ -151,7 +151,7 @@ python manager.py runserver 0:8000
 ```
 runserver実行後、以下のメッセージが表示されたら起動成功   
 ```
-(django)[root@shindjango shindjango]# python manager.py runserver 0:8000
+(django)[root@django_db2 django_db2]# python manager.py runserver 0:8000
 Watching for file changes with StatReloader
 Performing system checks...
 

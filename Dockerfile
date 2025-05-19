@@ -30,7 +30,7 @@ RUN rm -rf /tmp/* /var/tmp/* /root/.cache/*
 # ポート公開（Web/Django）
 EXPOSE 8000
 
-WORKDIR /home/dev/github/shindjango
+WORKDIR /home/dev/github/django_db2
 
 # サーバ初期化後に処理したいスクリプトをコピー
 COPY docker/scripts/postprocessing.sh /var/custom/postprocessing.sh
